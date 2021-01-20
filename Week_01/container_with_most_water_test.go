@@ -33,7 +33,7 @@ func maxArea1(height []int) int {
 	return max
 }
 
-// 解法二 双指针
+// 解法二 双指针 夹逼
 func maxArea2(height []int) int {
 	o := 0
 	i, j := 0, len(height)-1

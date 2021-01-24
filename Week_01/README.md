@@ -2,6 +2,8 @@
 
 ## 目录
 
+[作业](#实战题目)
+
 ## 数组 数组(Array)
 
 * 简述
@@ -57,126 +59,254 @@
 
 ## 实战题目
 
-### [盛最多水的容器](./move_zeroes_test.go) (腾讯、百度、字节跳动在近半年内面试常考)
+* [盛最多水的容器](./container_with_most_water_test.go)
 
-### [移动零](./move_zeroes_test) (华为、字节跳动在近半年内面试常考)
+  [leetcode](https://leetcode-cn.com/problems/container-with-most-water/)
 
-[leetcode链接](https://leetcode-cn.com/problems/container-with-most-water/)
+```go
+// 解法一 暴力 双重遍历
+func maxArea1(height []int) int {
+  var max = 0
+  for i := 0; i < len(height); i++ {
+    for j := i + 1; j < len(height); j++ {
+      min := func(a, b int) int {
+        if a > b {
+          return b
+        }
+        return a
+      }(height[i], height[j])
+      if max < min*(j-i) {
+        max = min * (j - i)
+      }
+    }
+  }
+  return max
+}
+```
 
-给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+```go
+// 解法二 双指针 夹逼
+func maxArea2(height []int) int {
+  o := 0
+  i, j := 0, len(height)-1
+  for i != j {
+    hi, hj := height[i], height[j]
+    s := (j - i) * func(a, b int) int {
+      if a > b {
+        return b
+      }
+      return a
+    }(height[i], height[j])
+    if s > o {
+      o = s
+    }
+    if hi > hj {
+      j--
+    } else {
+      i++
+    }
+  }
+  return o
+}
+```
 
-说明：你不能倾斜容器。
+* [移动零](./move_zeroes_test.go)
 
-输入：[1,8,6,2,5,4,8,3,7]
-输出：49
-解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
-示例 2：
+  [leetcode](https://leetcode-cn.com/problems/move-zeroes/)
 
-输入：height = [1,1]
-输出：1
-示例 3：
+```go
+// moveZeroes1 解法一 双指针
+func moveZeroes1(nums []int) {
+  if len(nums) == 0 {
+    return
+  }
+  i, j := 0, 0
+  for i < len(nums) {
+    if nums[i] != 0 {
+      nums[i], nums[j] = nums[j], nums[i]
+      i++
+      j++
+    } else {
+      i++
+    }
+  }
+}
+```
 
-输入：height = [4,3,2,1,4]
-输出：16
-示例 4：
+* [爬楼梯](./climbing_stairs_test.go)
 
-输入：height = [1,2,1]
-输出：2
+  [leetcode](https://leetcode-cn.com/problems/climbing-stairs/)
 
-### [移动零](./move_zeroes_test.go) (华为、字节跳动在近半年内面试常考)
+```go
+// 斐波那契
+func climbStairs(n int) int {
+  if n < 2 {
+    return n
+  }
+  v1, v2, res := 1, 1, 2
+  for i := 2; i <= n; i++ {
+    res = v1 + v2
+    v1, v2 = v2, res
+  }
+  return res
+}
+```
 
-[leetcode链接](https://leetcode-cn.com/problems/move-zeroes/)
+* [三数之和](./three_sum_test.go)
 
-* 描述：给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
-* 示例:
+  [leetcode](https://leetcode-cn.com/problems/3sum/)
 
-  输入: [0,1,0,3,12]  
-  输出: [1,3,12,0,0]
-  
-* 说明:必须在原数组上操作，不能拷贝额外的数组。尽量减少操作次数。
+```go
 
-### [爬楼梯](./) (阿里巴巴、腾讯、字节跳动在半年内面试常考)
+// 暴力  理解题意
+func threeSum1(nums []int) [][]int {
+  sort.Ints(nums)
+  fmt.Println(nums)
+  var out [][]int
+  var re = make(map[string]int)
+  for i := 0; i < len(nums); i++ {
+    if nums[i] > 0 {
+      return out
+    }
+    if i > 0 && nums[i] == nums[i-1] {
+      return out
+    }
+    for j := i + 1; j < len(nums); j++ {
+      for m := j + 1; m < len(nums); m++ {
+        if nums[i]+nums[j]+nums[m] == 0 {
+          key := strconv.Itoa(nums[i]) + strconv.Itoa(nums[j]) + strconv.Itoa(nums[m])
+          if _, ok := re[key]; !ok {
+            re[key] = 0
+            out = append(out, []int{nums[i], nums[j], nums[m]})
+          }
+        }
+      }
+    }
+  }
+  return out
+}
 
-### [三数之和](./) (国内、国际大厂历年面试高频老题)
+// 双指针
+func threeSum3(nums []int) [][]int {
+  sort.Ints(nums)
+  var (
+    out  [][]int
+    lens = len(nums)
+  )
+  if lens < 3 {
+    return out
+  }
+  for i := 0; i < len(nums); i++ {
+    if nums[i] > 0 {
+      return out
+    }
+    if i > 0 && nums[i] == nums[i-1] {
+      continue
+    }
+    // 双指针
+    var j, m = i + 1, lens - 1
+    for j < m {
+      sum := nums[i] + nums[j] + nums[m]
+      switch {
+      case sum == 0:
+        out = append(out, []int{nums[i], nums[j], nums[m]})
+        for j < m && nums[j] == nums[j+1] {
+          j += 1
+        }
+        for j < m && nums[m] == nums[m-1] {
+          m -= 1
+        }
+        j, m = j+1, m-1
+      case sum > 0:
+        m -= 1
+      case sum < 0:
+        j += 1
+      }
+    }
+  }
+  return out
+}
+```
 
-* 说明:必须在原数组上操作，不能拷贝额外的数组。尽量减少操作次数。
+* [数组形式的整数加法](./add_array_integer_test.go)
 
-### [爬楼梯](./climbing_stairs.go) (阿里巴巴、腾讯、字节跳动在半年内面试常考)
+  [leetcode](https://leetcode-cn.com/problems/add-to-array-form-of-integer/)
 
-[leetcode链接](https://leetcode-cn.com/problems/climbing-stairs/)
+```go
+// 翻转
+func addToArrayForm1(A []int, K int) []int {
+  var (
+    lens = len(A)
+    add  int
+  )
+  A = reverse(A)
+  for i := 0; i < lens || K != 0; i, K = i+1, K/10 {
+    fmt.Println(i)
+    if i >= lens {
+      A = append(A, 0)
+    }
+    sum := K%10 + A[i] + add
+    add = sum / 10
+    A[i] = sum % 10
+  }
+  if add > 0 {
+    A = append(A, add)
+  }
+  A = reverse(A)
+  return A
+}
 
-* 描述 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
-  每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
-  注意：给定 n 是一个正整数。
+func reverse(sli []int) []int {
+  for i := 0; i < len(sli)/2; i++ {
+    sli[i], sli[len(sli)-1-i] = sli[len(sli)-1-i], sli[i]
+  }
+  return sli
+}
+```
 
-* 示例 1：
+* [有效的字母异位词](./valid_anagram_test.go)
 
-  输入： 2
-  输出： 2
-  解释： 有两种方法可以爬到楼顶。
+  [leetcode](https://leetcode-cn.com/problems/valid-anagram/)
 
-  * 1 阶 + 1 阶
-  * 2 阶
+```go
+func isAnagram(s string, t string) bool {
+  if len(s) != len(t) {
+    return false
+  }
+  ss := [26]int{}
+  ts := [26]int{}
+  for i := 0; i < len(s); i++ {
+    index := s[i] - 'a'
+    ss[index]++
+  }
+  fmt.Print(ss)
+  for i := 0; i < len(t); i++ {
+    index := t[i] - 'a'
+    ts[index]++
+  }
+  fmt.Print(ss)
+  return ss == ts
+}
+```
 
-* 示例 2：
+* [删除排序数组中的重复项](./remove_duplicates_test.go)
 
-  输入： 3
-  输出： 3
-  解释： 有三种方法可以爬到楼顶。
-  * 1 阶 + 1 阶 + 1 阶
-  * 1 阶 + 2 阶
-  * 2 阶 + 1 阶
+  [leetcode](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
 
-### [三数之和](./three_sum_test.go) (国内、国际大厂历年面试高频老题)
-
-[leetcode链接](https://leetcode-cn.com/problems/3sum/)
-
-* 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
-注意：答案中不可以包含重复的三元组。
-
-* 示例 1：
-
-  输入：nums = [-1,0,1,2,-1,-4]
-  输出：[[-1,-1,2],[-1,0,1]]
-
-* 示例 2：
-
-  输入：nums = []
-  输出：[]
-
-* 示例 3：
-
-  输入：nums = [0]
-  输出：[]
-
-### [数组形式的整数加法](./)
-
-[leetcode链接](https://leetcode-cn.com/problems/add-to-array-form-of-integer/)
-
-* 对于非负整数 X 而言，X 的数组形式是每位数字按从左到右的顺序形成的数组。例如，如果 X = 1231，那么其数组形式为 [1,2,3,1]。
-
-给定非负整数 X 的数组形式 A，返回整数 X+K 的数组形式。
-
-* 示例 1：
-
-  输入：A = [1,2,0,0], K = 34
-  输出：[1,2,3,4]
-  解释：1200 + 34 = 1234
-
-* 示例 2：
-
-  输入：A = [2,7,4], K = 181
-  输出：[4,5,5]
-  解释：274 + 181 = 455
-
-* 示例 3：
-
-  输入：A = [2,1,5], K = 806
-  输出：[1,0,2,1]
-  解释：215 + 806 = 1021
-
-* 示例 4：
-
-  输入：A = [9,9,9,9,9,9,9,9,9,9], K = 1
-  输出：[1,0,0,0,0,0,0,0,0,0,0]
-  解释：9999999999 + 1 = 10000000000
+```go
+// 快慢指针
+func removeDuplicates(nums []int) int {
+  lens := len(nums)
+  var i, j = 0, 1
+  for j < lens {
+    if nums[i] == nums[j] {
+      j++
+    } else {
+      i++
+      nums[i] = nums[j]
+    }
+  }
+  fmt.Println(nums)
+  return i + 1
+}
+```

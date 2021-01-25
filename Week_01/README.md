@@ -2,6 +2,8 @@
 
 ## 目录
 
+[作业](#实战题目)
+
 ## 数组 数组(Array)
 
 * 简述
@@ -57,30 +59,290 @@
 
 ## 实战题目
 
-### [盛最多水的容器](./container_with_most_water_test.go)
+* [盛最多水的容器](./container_with_most_water_test.go)
 
-[leetcode](https://leetcode-cn.com/problems/container-with-most-water/)
+  [leetcode](https://leetcode-cn.com/problems/container-with-most-water/)
 
-### [移动零](./move_zeroes_test)
+```go
+// 解法一 暴力 双重遍历
+func maxArea1(height []int) int {
+  var max = 0
+  for i := 0; i < len(height); i++ {
+    for j := i + 1; j < len(height); j++ {
+      min := func(a, b int) int {
+        if a > b {
+          return b
+        }
+        return a
+      }(height[i], height[j])
+      if max < min*(j-i) {
+        max = min * (j - i)
+      }
+    }
+  }
+  return max
+}
+```
 
-[leetcode](https://leetcode-cn.com/problems/container-with-most-water/)
+```go
+// 解法二 双指针 夹逼
+func maxArea2(height []int) int {
+  o := 0
+  i, j := 0, len(height)-1
+  for i != j {
+    hi, hj := height[i], height[j]
+    s := (j - i) * func(a, b int) int {
+      if a > b {
+        return b
+      }
+      return a
+    }(height[i], height[j])
+    if s > o {
+      o = s
+    }
+    if hi > hj {
+      j--
+    } else {
+      i++
+    }
+  }
+  return o
+}
+```
 
-### [移动零](./move_zeroes_test.go)
+* [移动零](./move_zeroes_test.go)
 
-[leetcode](https://leetcode-cn.com/problems/move-zeroes/)
+  [leetcode](https://leetcode-cn.com/problems/move-zeroes/)
 
-### [爬楼梯](./climbing_stairs.go)
+```go
+// moveZeroes1 解法一 双指针
+func moveZeroes1(nums []int) {
+  if len(nums) == 0 {
+    return
+  }
+  i, j := 0, 0
+  for i < len(nums) {
+    if nums[i] != 0 {
+      nums[i], nums[j] = nums[j], nums[i]
+      i++
+      j++
+    } else {
+      i++
+    }
+  }
+}
+```
 
-[leetcode](https://leetcode-cn.com/problems/climbing-stairs/)
+* [爬楼梯](./climbing_stairs_test.go)
 
-### [三数之和](./three_sum_test.go)
+  [leetcode](https://leetcode-cn.com/problems/climbing-stairs/)
 
-[leetcode](https://leetcode-cn.com/problems/3sum/)
+```go
+// 斐波那契
+func climbStairs(n int) int {
+  if n < 2 {
+    return n
+  }
+  v1, v2, res := 1, 1, 2
+  for i := 2; i <= n; i++ {
+    res = v1 + v2
+    v1, v2 = v2, res
+  }
+  return res
+}
+```
 
-### [数组形式的整数加法](./add_array_integer_test.go)
+* [三数之和](./three_sum_test.go)
 
-[leetcode](https://leetcode-cn.com/problems/add-to-array-form-of-integer/)
+  [leetcode](https://leetcode-cn.com/problems/3sum/)
 
-### [两数之和](./two_sum_test.go)
+```go
 
-[leetcode](https://leetcode-cn.com/problems/two-sum/)
+// 暴力  理解题意
+func threeSum1(nums []int) [][]int {
+  sort.Ints(nums)
+  fmt.Println(nums)
+  var out [][]int
+  var re = make(map[string]int)
+  for i := 0; i < len(nums); i++ {
+    if nums[i] > 0 {
+      return out
+    }
+    if i > 0 && nums[i] == nums[i-1] {
+      return out
+    }
+    for j := i + 1; j < len(nums); j++ {
+      for m := j + 1; m < len(nums); m++ {
+        if nums[i]+nums[j]+nums[m] == 0 {
+          key := strconv.Itoa(nums[i]) + strconv.Itoa(nums[j]) + strconv.Itoa(nums[m])
+          if _, ok := re[key]; !ok {
+            re[key] = 0
+            out = append(out, []int{nums[i], nums[j], nums[m]})
+          }
+        }
+      }
+    }
+  }
+  return out
+}
+
+// 双指针
+func threeSum3(nums []int) [][]int {
+  sort.Ints(nums)
+  var (
+    out  [][]int
+    lens = len(nums)
+  )
+  if lens < 3 {
+    return out
+  }
+  for i := 0; i < len(nums); i++ {
+    if nums[i] > 0 {
+      return out
+    }
+    if i > 0 && nums[i] == nums[i-1] {
+      continue
+    }
+    // 双指针
+    var j, m = i + 1, lens - 1
+    for j < m {
+      sum := nums[i] + nums[j] + nums[m]
+      switch {
+      case sum == 0:
+        out = append(out, []int{nums[i], nums[j], nums[m]})
+        for j < m && nums[j] == nums[j+1] {
+          j += 1
+        }
+        for j < m && nums[m] == nums[m-1] {
+          m -= 1
+        }
+        j, m = j+1, m-1
+      case sum > 0:
+        m -= 1
+      case sum < 0:
+        j += 1
+      }
+    }
+  }
+  return out
+}
+```
+
+* [数组形式的整数加法](./add_array_integer_test.go)
+
+  [leetcode](https://leetcode-cn.com/problems/add-to-array-form-of-integer/)
+
+```go
+// 翻转
+func addToArrayForm1(A []int, K int) []int {
+  var (
+    lens = len(A)
+    add  int
+  )
+  A = reverse(A)
+  for i := 0; i < lens || K != 0; i, K = i+1, K/10 {
+    fmt.Println(i)
+    if i >= lens {
+      A = append(A, 0)
+    }
+    sum := K%10 + A[i] + add
+    add = sum / 10
+    A[i] = sum % 10
+  }
+  if add > 0 {
+    A = append(A, add)
+  }
+  A = reverse(A)
+  return A
+}
+
+func reverse(sli []int) []int {
+  for i := 0; i < len(sli)/2; i++ {
+    sli[i], sli[len(sli)-1-i] = sli[len(sli)-1-i], sli[i]
+  }
+  return sli
+}
+```
+
+* [有效的字母异位词](./valid_anagram_test.go)
+
+  [leetcode](https://leetcode-cn.com/problems/valid-anagram/)
+
+```go
+func isAnagram(s string, t string) bool {
+  if len(s) != len(t) {
+    return false
+  }
+  ss := [26]int{}
+  ts := [26]int{}
+  for i := 0; i < len(s); i++ {
+    index := s[i] - 'a'
+    ss[index]++
+  }
+  fmt.Print(ss)
+  for i := 0; i < len(t); i++ {
+    index := t[i] - 'a'
+    ts[index]++
+  }
+  fmt.Print(ss)
+  return ss == ts
+}
+```
+
+* [删除排序数组中的重复项](./remove_duplicates_test.go)
+
+  [leetcode](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+
+```go
+// 快慢指针
+func removeDuplicates(nums []int) int {
+  lens := len(nums)
+  var i, j = 0, 1
+  for j < lens {
+    if nums[i] == nums[j] {
+      j++
+    } else {
+      i++
+      nums[i] = nums[j]
+    }
+  }
+  fmt.Println(nums)
+  return i + 1
+}
+```
+
+* [两数之和](./two_sum_test.go)
+
+  [leetcode](https://leetcode-cn.com/problems/two-sum/)
+
+```go
+// 暴力解法
+func twoSum(nums []int, target int) []int {
+  l := len(nums)
+  out := make([]int, 2)
+  for i := 0; i < l; i++ {
+    for j := i + 1; j < l; j++ {
+      if nums[i]+nums[j] == target {
+        out[0] = i
+        out[1] = j
+        return out
+      }
+    }
+  }
+  return out
+}
+
+// 哈希
+func twoSum1(nums []int, target int) []int {
+  result := []int{}
+  m := make(map[int]int)
+  for i, k := range nums {
+    if value, exist := m[target-k]; exist {
+      result = append(result, value)
+      result = append(result, i)
+    }
+    m[k] = i
+  }
+  return result
+}
+```

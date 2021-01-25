@@ -54,3 +54,16 @@ func fizzBuzz1(n int) []string {
 	}
 	return out
 }
+
+var vals = []string{
+	"%d", "%d", "Fizz%.T", "%d", "Buzz%.T", "Fizz%.T", "%d", "%d",
+	"Fizz%.T", "Buzz%.T", "%d", "Fizz%.T", "%d", "%d", "FizzBuzz%.T",
+}
+
+func fizzBuzz2(n int) []string {
+	ret := make([]string, n)
+	for i := range ret {
+		ret[i] = fmt.Sprintf(vals[i%len(vals)], i+1)
+	}
+	return ret
+}

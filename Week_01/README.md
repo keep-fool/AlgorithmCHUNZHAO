@@ -57,126 +57,30 @@
 
 ## 实战题目
 
-### [盛最多水的容器](./move_zeroes_test.go) (腾讯、百度、字节跳动在近半年内面试常考)
+### [盛最多水的容器](./container_with_most_water_test.go)
 
-### [移动零](./move_zeroes_test) (华为、字节跳动在近半年内面试常考)
+[leetcode](https://leetcode-cn.com/problems/container-with-most-water/)
 
-[leetcode链接](https://leetcode-cn.com/problems/container-with-most-water/)
+### [移动零](./move_zeroes_test)
 
-给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+[leetcode](https://leetcode-cn.com/problems/container-with-most-water/)
 
-说明：你不能倾斜容器。
+### [移动零](./move_zeroes_test.go)
 
-输入：[1,8,6,2,5,4,8,3,7]
-输出：49
-解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
-示例 2：
+[leetcode](https://leetcode-cn.com/problems/move-zeroes/)
 
-输入：height = [1,1]
-输出：1
-示例 3：
+### [爬楼梯](./climbing_stairs.go)
 
-输入：height = [4,3,2,1,4]
-输出：16
-示例 4：
+[leetcode](https://leetcode-cn.com/problems/climbing-stairs/)
 
-输入：height = [1,2,1]
-输出：2
+### [三数之和](./three_sum_test.go)
 
-### [移动零](./move_zeroes_test.go) (华为、字节跳动在近半年内面试常考)
+[leetcode](https://leetcode-cn.com/problems/3sum/)
 
-[leetcode链接](https://leetcode-cn.com/problems/move-zeroes/)
+### [数组形式的整数加法](./add_array_integer_test.go)
 
-* 描述：给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
-* 示例:
+[leetcode](https://leetcode-cn.com/problems/add-to-array-form-of-integer/)
 
-  输入: [0,1,0,3,12]  
-  输出: [1,3,12,0,0]
-  
-* 说明:必须在原数组上操作，不能拷贝额外的数组。尽量减少操作次数。
+### [两数之和](./two_sum_test.go)
 
-### [爬楼梯](./) (阿里巴巴、腾讯、字节跳动在半年内面试常考)
-
-### [三数之和](./) (国内、国际大厂历年面试高频老题)
-
-* 说明:必须在原数组上操作，不能拷贝额外的数组。尽量减少操作次数。
-
-### [爬楼梯](./climbing_stairs.go) (阿里巴巴、腾讯、字节跳动在半年内面试常考)
-
-[leetcode链接](https://leetcode-cn.com/problems/climbing-stairs/)
-
-* 描述 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
-  每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
-  注意：给定 n 是一个正整数。
-
-* 示例 1：
-
-  输入： 2
-  输出： 2
-  解释： 有两种方法可以爬到楼顶。
-
-  * 1 阶 + 1 阶
-  * 2 阶
-
-* 示例 2：
-
-  输入： 3
-  输出： 3
-  解释： 有三种方法可以爬到楼顶。
-  * 1 阶 + 1 阶 + 1 阶
-  * 1 阶 + 2 阶
-  * 2 阶 + 1 阶
-
-### [三数之和](./three_sum_test.go) (国内、国际大厂历年面试高频老题)
-
-[leetcode链接](https://leetcode-cn.com/problems/3sum/)
-
-* 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
-注意：答案中不可以包含重复的三元组。
-
-* 示例 1：
-
-  输入：nums = [-1,0,1,2,-1,-4]
-  输出：[[-1,-1,2],[-1,0,1]]
-
-* 示例 2：
-
-  输入：nums = []
-  输出：[]
-
-* 示例 3：
-
-  输入：nums = [0]
-  输出：[]
-
-### [数组形式的整数加法](./)
-
-[leetcode链接](https://leetcode-cn.com/problems/add-to-array-form-of-integer/)
-
-* 对于非负整数 X 而言，X 的数组形式是每位数字按从左到右的顺序形成的数组。例如，如果 X = 1231，那么其数组形式为 [1,2,3,1]。
-
-给定非负整数 X 的数组形式 A，返回整数 X+K 的数组形式。
-
-* 示例 1：
-
-  输入：A = [1,2,0,0], K = 34
-  输出：[1,2,3,4]
-  解释：1200 + 34 = 1234
-
-* 示例 2：
-
-  输入：A = [2,7,4], K = 181
-  输出：[4,5,5]
-  解释：274 + 181 = 455
-
-* 示例 3：
-
-  输入：A = [2,1,5], K = 806
-  输出：[1,0,2,1]
-  解释：215 + 806 = 1021
-
-* 示例 4：
-
-  输入：A = [9,9,9,9,9,9,9,9,9,9], K = 1
-  输出：[1,0,0,0,0,0,0,0,0,0,0]
-  解释：9999999999 + 1 = 10000000000
+[leetcode](https://leetcode-cn.com/problems/two-sum/)

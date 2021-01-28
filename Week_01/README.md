@@ -363,3 +363,88 @@ func plusOne(digits []int) []int {
   return append([]int{1}, digits...)
 }
 ```
+
+* [189. 旋转数组](./rotate_array_test.go)
+
+  [leetcode](https://leetcode-cn.com/problems/rotate-array/)
+
+```go
+func rotate(nums []int, k int) []int {
+  res := []int{}
+  res = append(nums[k:], nums[:k]...)
+  nums = []int{}
+  nums = res
+  return nums
+}
+
+func rotate1(nums []int, k int) {
+  reverse(nums)
+  reverse(nums[:k%len(nums)])
+  reverse(nums[k%len(nums):])
+}
+
+func reverse(arr []int) {
+  for i := 0; i < len(arr)/2; i++ {
+    arr[i], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[i]
+  }
+}
+```
+
+* [412. Fizz Buzz](./fizz_buzz_test.go)
+
+  [leetcode](https://leetcode-cn.com/problems/fizz-buzz/)
+
+```go
+// 常规暴力做法
+func fizzBuzz(n int) []string {
+  out := []string{}
+  for i := 1; i <= n; i++ {
+    switch {
+    case i%15 == 0:
+      out = append(out, "FizzBuzz")
+    case i%3 == 0:
+      out = append(out, "Fizz")
+    case i%5 == 0:
+      out = append(out, "Buzz")
+    default:
+      out = append(out, fmt.Sprint(i))
+    }
+  }
+  return out
+}
+
+func fizzBuzz1(n int) []string {
+  out := []string{}
+  for i := 1; i <= n; i++ {
+    str := ""
+    if i%3 == 0 {
+      str += "Fizz"
+    }
+    if i%5 == 0 {
+      str += "Buzz"
+    }
+    if str == "" {
+      str += fmt.Sprint(i)
+    }
+    out = append(out, str)
+  }
+  return out
+}
+
+var vals = []string{
+  "%d", "%d", "Fizz%.T", "%d", "Buzz%.T", "Fizz%.T", "%d", "%d",
+  "Fizz%.T", "Buzz%.T", "%d", "Fizz%.T", "%d", "%d", "FizzBuzz%.T",
+}
+
+func fizzBuzz2(n int) []string {
+  ret := make([]string, n)
+  for i := range ret {
+    ret[i] = fmt.Sprintf(vals[i%len(vals)], i+1)
+  }
+  return ret
+}
+```
+
+* [21. 合并两个有序链表](./merge_two_sorted_lists_test.go)
+
+  [leetcode](https://leetcode-cn.com/problems/merge-two-sorted-lists/solution/)

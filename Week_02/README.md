@@ -47,6 +47,27 @@ func inorder(root *TreeNode, res *[]int) {
 }
 ```
 
+* [144. 二叉树的前序遍历](./binary_tree_traversal_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/)
+
+```go
+func preorderTraversal(root *TreeNode) []int {
+    res := []int{}
+    preorder(root, &res)
+    return res
+}
+
+func preorder(root *TreeNode, res *[]int) {
+    if root == nil {
+        return
+    }
+    *res = append(*res, root.Val)
+    preorder(root.Left, res)
+    preorder(root.Right, res)
+}
+```
+
 * [589.N叉树的前序遍历](./n_ary_tree_traversal_test.go)
 
     [leetcode](https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/)

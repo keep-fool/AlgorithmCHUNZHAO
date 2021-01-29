@@ -1,7 +1,6 @@
 package week02
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -30,9 +29,23 @@ func TestBinaryTreeTraversal(t *testing.T) {
 	//   4
 	// 2   6
 	//1 3 5 7
-	t.Log(inorderTraversal(root))
-	t.Log(preorderTraversal(root))
+	t.Log(inorderTraversalBinary(root))
+	t.Log(preorderTraversalBinary(root))
+	t.Log(postorderTraversalBinary(root))
 }
+
+// result
+
+/*
+$ go test -v Week_02/binary_tree_traversal_test.go
+=== RUN   TestBinaryTreeTraversal
+    binary_tree_traversal_test.go:32: [1 2 3 4 5 6 7]
+    binary_tree_traversal_test.go:33: [4 2 1 3 6 5 7]
+    binary_tree_traversal_test.go:34: [1 3 2 5 7 6 4]
+--- PASS: TestBinaryTreeTraversal (0.00s)
+PASS
+ok      command-line-arguments  0.156s
+*/
 
 // Definition for a binary tree node.
 type TreeNode struct {
@@ -43,34 +56,73 @@ type TreeNode struct {
 
 // 递归
 // 中序遍历
-func inorderTraversal(root *TreeNode) []int {
+func inorderTraversalBinary(root *TreeNode) []int {
 	res := []int{}
-	inorder(root, &res)
+	inorderBinary(root, &res)
 	return res
 }
 
-func inorder(root *TreeNode, res *[]int) {
+func inorderBinary(root *TreeNode, res *[]int) {
 	if root == nil {
 		return
 	}
-	fmt.Print(root.Val)
-	inorder(root.Left, res)
+	inorderBinary(root.Left, res)
 	*res = append(*res, root.Val)
-	inorder(root.Right, res)
+	inorderBinary(root.Right, res)
 }
 
 // 前序遍历
-func preorderTraversal(root *TreeNode) []int {
+func preorderTraversalBinary(root *TreeNode) []int {
 	res := []int{}
-	preorder(root, &res)
+	preorderBinary(root, &res)
 	return res
 }
 
-func preorder(root *TreeNode, res *[]int) {
+func preorderBinary(root *TreeNode, res *[]int) {
 	if root == nil {
 		return
 	}
 	*res = append(*res, root.Val)
-	preorder(root.Left, res)
-	preorder(root.Right, res)
+	preorderBinary(root.Left, res)
+	preorderBinary(root.Right, res)
+}
+
+// 后序遍历
+func postorderTraversalBinary(root *TreeNode) []int {
+	res := []int{}
+	postorderBinary(root, &res)
+	return res
+}
+
+func postorderBinary(root *TreeNode, res *[]int) {
+	if root == nil {
+		return
+	}
+	postorderBinary(root.Left, res)
+	postorderBinary(root.Right, res)
+	*res = append(*res, root.Val)
+}
+
+func levelOrderBinary(root *TreeNode) [][]int {
+	ret := [][]int{}
+	if root == nil {
+		return ret
+	}
+	q := []*TreeNode{root}
+	for i := 0; len(q) > 0; i++ {
+		ret = append(ret, []int{})
+		p := []*TreeNode{}
+		for j := 0; j < len(q); j++ {
+			node := q[j]
+			ret[i] = append(ret[i], node.Val)
+			if node.Left != nil {
+				p = append(p, node.Left)
+			}
+			if node.Right != nil {
+				p = append(p, node.Right)
+			}
+		}
+		q = p
+	}
+	return ret
 }

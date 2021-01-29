@@ -61,7 +61,7 @@ func preorder(root *Node) []int {
 	return out
 }
 
-func preorder(root *Node) []int {
+func preorder1(root *Node) []int {
 	var out []int
 	var stack = []*Node{root}
 	for len(stack) > 0 {

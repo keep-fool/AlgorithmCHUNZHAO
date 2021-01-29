@@ -448,3 +448,28 @@ func fizzBuzz2(n int) []string {
 * [21. 合并两个有序链表](./merge_two_sorted_lists_test.go)
 
   [leetcode](https://leetcode-cn.com/problems/merge-two-sorted-lists/solution/)
+
+```go
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+  prehead := &ListNode{}
+  result := prehead
+  for l1 != nil && l2 != nil {
+    if l1.Val < l2.Val {
+      prehead.Next = l1
+      l1 = l1.Next
+    } else {
+      prehead.Next = l2
+      l2 = l2.Next
+    }
+    prehead = prehead.Next
+    fmt.Println(prehead)
+  }
+  if l1 != nil {
+    prehead.Next = l1
+  }
+  if l2 != nil {
+    prehead.Next = l2
+  }
+  return result.Next
+}
+```

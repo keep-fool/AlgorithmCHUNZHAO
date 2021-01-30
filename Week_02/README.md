@@ -68,6 +68,82 @@ func preorder(root *TreeNode, res *[]int) {
 }
 ```
 
+* [144. 二叉树的后序遍历](./binary_tree_traversal_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
+
+```go
+// 后序遍历
+func postorderTraversalBinary(root *TreeNode) []int {
+    res := []int{}
+    postorderBinary(root, &res)
+    return res
+}
+
+func postorderBinary(root *TreeNode, res *[]int) {
+    if root == nil {
+        return
+    }
+    postorderBinary(root.Left, res)
+    postorderBinary(root.Right, res)
+    *res = append(*res, root.Val)
+}
+```
+
+* [144. 二叉树的层序遍历](./binary_tree_traversal_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
+
+```go
+func levelOrderBinary(root *TreeNode) [][]int {
+    ret := [][]int{}
+    if root == nil {
+        return ret
+    }
+    q := []*TreeNode{root}
+    for i := 0; len(q) > 0; i++ {
+        ret = append(ret, []int{})
+        p := []*TreeNode{}
+        for j := 0; j < len(q); j++ {
+            node := q[j]
+            ret[i] = append(ret[i], node.Val)
+            if node.Left != nil {
+                p = append(p, node.Left)
+            }
+            if node.Right != nil {
+                p = append(p, node.Right)
+            }
+        }
+        q = p
+    }
+    return ret
+}
+```
+
+* [236. 二叉树的最近公共祖先](./binary_tree_traversal_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+```go
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+    if root == nil {
+        return nil
+    }
+    if root == q || root == p {
+        return root
+    }
+    left := lowestCommonAncestor(root.Left, p, q)
+    right := lowestCommonAncestor(root.Right, p, q)
+    if left != nil && right != nil {
+        return root
+    }
+    if left == nil {
+        return right
+    }
+    return left
+}
+```
+
 * [589.N叉树的前序遍历](./n_ary_tree_traversal_test.go)
 
     [leetcode](https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/)
@@ -89,3 +165,48 @@ func postorder(root *Node) []int {
 * [590. N叉树的后序遍历](./n_ary_tree_traversal_test.go)
 
     [leetcode](https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/)
+
+```go
+func postorder(root *Node) []int {
+    if root == nil {
+        return []int{}
+    }
+    results := []int{}
+    for _, v := range root.Children {
+        results = append(results, postorder(v)...)
+    }
+    results = append(results, root.Val)
+    return results
+}
+```
+
+* [590. N叉树的后序遍历](./n_ary_tree_traversal_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/)
+
+```go
+// 中序遍历 递归
+func postorder(root *Node) []int {
+    if root == nil {
+        return []int{}
+    }
+    results := []int{}
+    for _, v := range root.Children {
+        results = append(results, postorder(v)...)
+    }
+    results = append(results, root.Val)
+    return results
+}
+```
+
+* [最小的k个数](./n_ary_tree_traversal_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/)
+
+```go
+// 直接排序 返回前K个
+func getLeastNumbers(arr []int, k int) []int {
+    sort.Ints(arr)
+    return arr[:k]
+}
+```

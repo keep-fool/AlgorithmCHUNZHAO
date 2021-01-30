@@ -18,9 +18,3 @@ func getLeastNumbers(arr []int, k int) []int {
 	sort.Ints(arr)
 	return arr[:k]
 }
-
-// 直接排序 返回前K个
-func getLeastNumbers1(arr []int, k int) []int {
-	sort.Ints(arr)
-	return arr[:k]
-}

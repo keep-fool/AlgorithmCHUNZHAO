@@ -32,6 +32,8 @@ func TestBinaryTreeTraversal(t *testing.T) {
 	t.Log(inorderTraversalBinary(root))
 	t.Log(preorderTraversalBinary(root))
 	t.Log(postorderTraversalBinary(root))
+	t.Log(lowestCommonAncestor(root, root.Left.Right, root.Right))
+
 }
 
 // result
@@ -103,6 +105,7 @@ func postorderBinary(root *TreeNode, res *[]int) {
 	*res = append(*res, root.Val)
 }
 
+// 层寻遍历
 func levelOrderBinary(root *TreeNode) [][]int {
 	ret := [][]int{}
 	if root == nil {
@@ -125,4 +128,22 @@ func levelOrderBinary(root *TreeNode) [][]int {
 		q = p
 	}
 	return ret
+}
+
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	if root == q || root == p {
+		return root
+	}
+	left := lowestCommonAncestor(root.Left, p, q)
+	right := lowestCommonAncestor(root.Right, p, q)
+	if left != nil && right != nil {
+		return root
+	}
+	if left == nil {
+		return right
+	}
+	return left
 }

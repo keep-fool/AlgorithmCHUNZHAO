@@ -1,5 +1,17 @@
 # 学习笔记
 
+## 分治
+
+## 回溯
+
+## DFS
+
+## BFS
+
+## 贪心算法
+
+## 二分查找
+
 ## 目录
 
 [作业](#实战题目)
@@ -168,5 +180,105 @@ func buildNxNBoard(n int) [][]byte {
         result[i] = append([]byte{}, str...)
     }
     return result
+}
+```
+
+* [127. 单词接龙](./word_ladder_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/word-ladder/)
+
+```go
+func ladderLength(beginWord string, endWord string, wordList []string) int {
+    wordId := map[string]int{}
+    graph := [][]int{}
+    addWord := func(word string) int {
+        id, has := wordId[word]
+        if !has {
+            id = len(wordId)
+            wordId[word] = id
+            graph = append(graph, []int{})
+        }
+        return id
+    }
+    addEdge := func(word string) int {
+        id1 := addWord(word)
+        s := []byte(word)
+        for i, b := range s {
+            s[i] = '*'
+            id2 := addWord(string(s))
+            graph[id1] = append(graph[id1], id2)
+            graph[id2] = append(graph[id2], id1)
+            s[i] = b
+        }
+        return id1
+    }
+
+    for _, word := range wordList {
+        addEdge(word)
+    }
+    beginId := addEdge(beginWord)
+    endId, has := wordId[endWord]
+    if !has {
+        return 0
+    }
+
+    const inf int = math.MaxInt64
+    dist := make([]int, len(wordId))
+    for i := range dist {
+        dist[i] = inf
+    }
+    dist[beginId] = 0
+    queue := []int{beginId}
+    for len(queue) > 0 {
+        v := queue[0]
+        queue = queue[1:]
+        if v == endId {
+            return dist[endId]/2 + 1
+        }
+        for _, w := range graph[v] {
+            if dist[w] == inf {
+                dist[w] = dist[v] + 1
+                queue = append(queue, w)
+            }
+        }
+    }
+    return 0
+}
+```
+
+* [74. 搜索二维矩阵](./search_a2d_matrix_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/search-a-2d-matrix/)
+
+```go
+func searchMatrix(matrix [][]int, target int) bool {
+    line := -1
+    for i := 0; i < len(matrix)-1; i++ {
+        if target >= matrix[i][0] && target < matrix[i+1][0] {
+            line = i
+            break
+        }
+    }
+    if line == -1 && target > matrix[len(matrix)-1][len(matrix[0])-1] {
+        return false
+    }
+    if line == -1 {
+        line = len(matrix) - 1
+    }
+
+    right := len(matrix[0]) - 1
+    left := 0
+    for left <= right {
+        mid := left + (right-left)/2
+        if matrix[line][mid] == target {
+            return true
+        }
+        if matrix[line][mid] < target {
+            left = mid + 1
+        } else if matrix[line][mid] > target {
+            right = mid - 1
+        }
+    }
+    return false
 }
 ```

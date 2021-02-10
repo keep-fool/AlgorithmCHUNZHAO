@@ -22,6 +22,26 @@
 
 ## 树的递归
 
+模板:
+
+```go
+func recur(level int,param int)  {
+    // terminator
+    if level > MAX_LEVEL {
+        // process result 递归终止条件
+        return
+    }
+
+    // process current logic 处理当前层逻辑
+    process(level,param)
+
+    // drill down 递归下探到下一层
+    recur(level=level+1,newParam)
+
+    // restore current status 恢复当前层状态(有需要的话)
+}
+```
+
 ## 实战题目
 
 * [94.二叉树的中序遍历](./binary_tree_traversal_test.go)

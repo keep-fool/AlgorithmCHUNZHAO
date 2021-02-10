@@ -1,6 +1,34 @@
 # 学习笔记
 
+## 目录
+
+[作业](#实战题目)
+
+[题目汇总](https://shimo.im/sheets/q9gPKWky9dj9CjdP/32ljC/)
+
 ## 分治
+
+模板：
+
+```go
+func divideConquer(problem *Problem,params int) (result Result,error) {
+    // recursion terminator 递归终止条件
+    if (problem == nullptr) {
+        process_result
+        return result
+    }
+    // process current problem 处理当前问题
+    subproblems = splitProblem(problem, data)
+    subresult1 = divideConquer(subproblem[0], p1)
+    subresult2 = divideConquer(subproblem[1], p1)
+    subresult3 = divideConquer(subproblem[2], p1)
+    ...
+    // merge 合并结果
+    result = processResult(subresult1, subresult2, subresult3)
+    // revert the current level status 恢复当前层状态(有需要的话)
+    return result,nil
+}
+```
 
 ## 回溯
 
@@ -11,12 +39,6 @@
 ## 贪心算法
 
 ## 二分查找
-
-## 目录
-
-[作业](#实战题目)
-
-[题目汇总](https://shimo.im/sheets/q9gPKWky9dj9CjdP/32ljC/)
 
 ## 实战题目
 
@@ -280,5 +302,32 @@ func searchMatrix(matrix [][]int, target int) bool {
         }
     }
     return false
+}
+```
+
+* [78. 子集](./subsets_test.go)
+
+    [leetcode](https://leetcode-cn.com/problems/subsets/)
+
+```go
+func subsets(nums []int) [][]int {
+    res := [][]int{}
+    var dfs func(i int, list []int)
+    dfs = func(i int, list []int) {
+        // 终止条件
+        if i == len(nums) {
+            tmp := make([]int, len(list))
+            copy(tmp, list)
+            res = append(res, tmp)
+            return
+        }
+        // 保存结果
+        list = append(list, nums[i])
+        dfs(i+1, list)
+        list = list[:len(list)-1]
+        dfs(i+1, list)
+    }
+    dfs(0, []int{})
+    return res
 }
 ```
